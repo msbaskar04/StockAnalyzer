@@ -17,10 +17,10 @@ public class NewStockSorter {
 
 
     public static void main(String args[]) throws IOException {
-        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\Sample\\excelfiles\\MW-NIFTY-50-30-Dec-2025.xlsx";
-        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\Sample\\excelfiles\\MW-NIFTY-NEXT-50-30-Dec-2025.xlsx";
-        String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\Sample\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025.xlsx";
-        String destinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\Sample\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025-Result.xlsx";
+        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-30-Dec-2025.xlsx";
+        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-NEXT-50-30-Dec-2025.xlsx";
+        String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025.xlsx";
+        String destinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025-Result.xlsx";
 
         NewStockSorter newStockSorter = new NewStockSorter();
         List<Stock> stockList = newStockSorter.readExcel(filePath);
