@@ -22,24 +22,16 @@ public class NewStockSorter {
         String niftMidcap50File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-50-31-Dec-2025.xlsx";
         String niftMidcap150File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-150-31-Dec-2025.xlsx";
 
-        String nifty50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-31-Dec-2025-Result.xlsx";
+        String nifty50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-31-Dec-2025.xlsx";
         String niftyNext50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-NEXT-50-31-Dec-2025.xlsx";
         String niftMidcap50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-50-31-Dec-2025.xlsx";
         String niftMidcap150DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-150-31-Dec-2025.xlsx";
 
         NewStockSorter newStockSorter = new NewStockSorter();
-        /*newStockSorter.compute(nifty50File, nifty50DestinationFile);
+        newStockSorter.compute(nifty50File, nifty50DestinationFile);
         newStockSorter.compute(niftyNext50File, niftyNext50DestinationFile);
-        newStockSorter.compute(niftMidcap50File, niftMidcap50DestinationFile);*/
+        newStockSorter.compute(niftMidcap50File, niftMidcap50DestinationFile);
         newStockSorter.compute(niftMidcap150File, niftMidcap150DestinationFile);
-
-        /*stockList.forEach(stock->{
-            System.out.print(stock.getSymbol()+"===");
-            System.out.print(stock.getLtp()+"===");
-            System.out.print(stock.getHigh52W()+"===");
-            System.out.print(stock.getLow52W()+"===");
-            System.out.println(stock.getDiffFrom52WHigh());
-        });*/
     }
 
     public void compute(String filePath, String destinationFile) throws IOException {
@@ -85,11 +77,17 @@ public class NewStockSorter {
         stock.setChange30Days(getNumeric(row.getCell(index++)));
         stock.setChange365Days(getNumeric(row.getCell(index++)));
         stock.setDiffFrom52WHigh(calculate52WeekDownPercentage(stock.getHigh52W(), stock.getLtp()));
+        stock.setDiffFrom52WLow(calculate52WeekLowPercentage(stock.getLow52W(), stock.getLtp()));
         return stock;
     }
 
     private double calculate52WeekDownPercentage(double high52W, double ltp) {
         double onePercent = high52W/100;
+        return ltp/onePercent;
+    }
+
+    private double calculate52WeekLowPercentage(double low52W, double ltp) {
+        double onePercent = low52W/100;
         return ltp/onePercent;
     }
 
@@ -121,14 +119,16 @@ public class NewStockSorter {
             Workbook workbook = new XSSFWorkbook(fis)
         ) {
             // Create a new sheet
-            Sheet sheet = workbook.createSheet("Result");
+            Sheet sheet = workbook.createSheet("Result1");
             // Create header row
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Symbol");
             headerRow.createCell(1).setCellValue("LTP");
             headerRow.createCell(2).setCellValue("High52W");
-            headerRow.createCell(3).setCellValue("Low52W");
-            headerRow.createCell(4).setCellValue("DiffFrom52WHigh");
+            headerRow.createCell(3).setCellValue("DiffFrom52WHigh");
+            headerRow.createCell(4).setCellValue("Low52W");
+            headerRow.createCell(4).setCellValue("DiffFrom52WLow");
+
 
             int rowNum =1;
             for(Stock stock:stockList) {
@@ -140,9 +140,11 @@ public class NewStockSorter {
 
                 row.createCell(colNum++).setCellValue(stock.getHigh52W());
 
+                row.createCell(colNum++).setCellValue(stock.getDiffFrom52WHigh());
+
                 row.createCell(colNum++).setCellValue(stock.getLow52W());
 
-                row.createCell(colNum++).setCellValue(stock.getDiffFrom52WHigh());
+                row.createCell(colNum++).setCellValue(stock.getDiffFrom52WLow());
 
             }
 

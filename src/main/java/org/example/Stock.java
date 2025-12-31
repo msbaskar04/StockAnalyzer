@@ -18,6 +18,15 @@ public class Stock implements Comparable<Stock>{
 
     double thresholdDiff;
     double diffFrom52WHigh;
+    double diffFrom52WLow;
+
+    public double getDiffFrom52WLow() {
+        return diffFrom52WLow;
+    }
+
+    public void setDiffFrom52WLow(double diffFrom52WLow) {
+        this.diffFrom52WLow = diffFrom52WLow;
+    }
 
     public double getDiffFrom52WHigh() {
         return diffFrom52WHigh;
@@ -174,6 +183,7 @@ public class Stock implements Comparable<Stock>{
                 ", change365Days=" + change365Days +
                 ", thresholdDiff=" + thresholdDiff +
                 ", diffFrom52WHigh=" + diffFrom52WHigh +
+                ", diffFrom52WLow=" + diffFrom52WLow +
                 '}';
     }
 }
