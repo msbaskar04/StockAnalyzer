@@ -17,15 +17,22 @@ public class NewStockSorter {
 
 
     public static void main(String args[]) throws IOException {
-        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-30-Dec-2025.xlsx";
-        //String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-NEXT-50-30-Dec-2025.xlsx";
-        String filePath = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025.xlsx";
-        String destinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-100-30-Dec-2025-Result.xlsx";
+        String nifty50File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-31-Dec-2025.xlsx";
+        String niftyNext50File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-NEXT-50-31-Dec-2025.xlsx";
+        String niftMidcap50File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-50-31-Dec-2025.xlsx";
+        String niftMidcap150File = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-150-31-Dec-2025.xlsx";
+
+        String nifty50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-50-31-Dec-2025-Result.xlsx";
+        String niftyNext50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-NEXT-50-31-Dec-2025.xlsx";
+        String niftMidcap50DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-50-31-Dec-2025.xlsx";
+        String niftMidcap150DestinationFile = "C:\\Users\\s484618\\Documents\\Xavier\\MyFolder\\JAVA\\StockAnalyzer\\excelfiles\\MW-NIFTY-MIDCAP-150-31-Dec-2025.xlsx";
 
         NewStockSorter newStockSorter = new NewStockSorter();
-        List<Stock> stockList = newStockSorter.readExcel(filePath);
-        newStockSorter.stockSorter(stockList);
-        newStockSorter.writeToExcel(stockList, filePath, destinationFile);
+        /*newStockSorter.compute(nifty50File, nifty50DestinationFile);
+        newStockSorter.compute(niftyNext50File, niftyNext50DestinationFile);
+        newStockSorter.compute(niftMidcap50File, niftMidcap50DestinationFile);*/
+        newStockSorter.compute(niftMidcap150File, niftMidcap150DestinationFile);
+
         /*stockList.forEach(stock->{
             System.out.print(stock.getSymbol()+"===");
             System.out.print(stock.getLtp()+"===");
@@ -33,6 +40,12 @@ public class NewStockSorter {
             System.out.print(stock.getLow52W()+"===");
             System.out.println(stock.getDiffFrom52WHigh());
         });*/
+    }
+
+    public void compute(String filePath, String destinationFile) throws IOException {
+        List<Stock> stockList = readExcel(filePath);
+        stockSorter(stockList);
+        writeToExcel(stockList, filePath, destinationFile);
     }
 
     public List readExcel(String filePath) throws IOException {
