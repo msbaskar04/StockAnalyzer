@@ -1,0 +1,82 @@
+import tensorflow as tf
+import tensorflow_hub as hub
+import numpy as np
+import cv2
+import requests
+import matplotlib.pyplot as plt # Import matplotlib
+
+# -------------------------
+# Load TensorFlow Hub Model
+# -------------------------
+print("Loading model...")
+model = hub.load("https://tfhub.dev/tensorflow/ssd_mobilenet_v2/2")
+print("Model loaded.")
+
+# -------------------------
+# Load Image from Internet
+# -------------------------
+image_url = "https://static01.nyt.com/images/2010/10/10/us/10google2/10google2-jumbo.jpg?quality=75&auto=webp&disable=upscale"
+
+print("Downloading image...")
+# Add User-Agent header to mimic a browser request
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+response = requests.get(image_url, headers=headers)
+response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+
+image_array = np.frombuffer(response.content, np.uint8)
+image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+
+# Check if the image was loaded successfully
+if image is None:
+    raise ValueError("Could not decode image from URL. It might not be a valid image or the URL is incorrect.")
+
+# Convert BGR to RGB for consistent display with matplotlib
+image_display = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+# Tensor conversion
+img_tensor = tf.convert_to_tensor(image_display, dtype=tf.uint8)
+img_tensor = tf.expand_dims(img_tensor, 0)
+
+# -------------------------
+# Run Detection
+# -------------------------
+print("Running detection...")
+output = model(img_tensor)
+
+boxes = output["detection_boxes"][0].numpy()
+classes = output["detection_classes"][0].numpy().astype(np.int32)
+scores = output["detection_scores"][0].numpy()
+
+# COCO class ID for "car"
+CAR_CLASS_ID = 3
+CONF_THRESHOLD = 0.4
+
+h, w, _ = image.shape
+
+# -------------------------
+# Draw Detected Cars
+# -------------------------
+for i in range(len(scores)):
+    if scores[i] > CONF_THRESHOLD and classes[i] == CAR_CLASS_ID:
+        ymin, xmin, ymax, xmax = boxes[i]
+
+        x1, y1 = int(xmin * w), int(ymin * h)
+        x2, y2 = int(xmax * w), int(ymax * h)
+
+        cv2.rectangle(image_display, (x1, y1), (x2, y2), (0, 255, 0), 3)
+        label = f"Car: {scores[i]*100:.1f}%"
+        cv2.putText(image_display, label, (x1, y1 - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
+print("Done.")
+# Display the image with matplotlib, which is more suitable for Colab notebooks
+plt.figure(figsize=(10, 8))
+plt.imshow(image_display)
+plt.title("Car Detection")
+plt.axis('off')
+plt.show()
+
+# cv2.imshow and related functions are not suitable for Colab environments.
+# cv2.imshow("Car Detection", image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
